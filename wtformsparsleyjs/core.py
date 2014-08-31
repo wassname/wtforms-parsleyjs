@@ -4,14 +4,22 @@ import re
 import copy
 
 from wtforms.validators import Length, NumberRange, Email, EqualTo, IPAddress, \
-    InputRequired, Regexp, URL, AnyOf
+    Regexp, URL, AnyOf, Optional
+try:
+    from wtforms.validators import DataRequired
+except ImportError:
+    # wtforms < 2.x
+    from wtforms.validators import Required as DataRequired
+
 from wtforms import StringField
 from wtforms.widgets import TextInput as _TextInput, PasswordInput as _PasswordInput, \
-    CheckboxInput as _CheckboxInput, Select as _Select, Input
+    CheckboxInput as _CheckboxInput, Select as _Select, TextArea as _TextArea, \
+    ListWidget as _ListWidget, HiddenInput as _HiddenInput, Input
 from wtforms.fields import StringField as _StringField, BooleanField as _BooleanField, \
     DecimalField as _DecimalField, IntegerField as _IntegerField, \
     FloatField as _FloatField, PasswordField as _PasswordField, \
-    SelectField as _SelectField
+    SelectField as _SelectField, TextAreaField as _TextAreaField, \
+    RadioField as _RadioField
 
 
 def parsley_kwargs(field, kwargs):
@@ -41,7 +49,7 @@ def parsley_kwargs(field, kwargs):
             _length_kwargs(new_kwargs, vali)
         if isinstance(vali, NumberRange):
             _number_range_kwargs(new_kwargs, vali)
-        if isinstance(vali, InputRequired):
+        if isinstance(vali, DataRequired):
             _input_required_kwargs(new_kwargs)
             _trigger_kwargs(new_kwargs, u'key')
         if isinstance(vali, Regexp) and not 'data_regexp' in new_kwargs:
@@ -50,26 +58,30 @@ def parsley_kwargs(field, kwargs):
             _url_kwargs(new_kwargs)
         if isinstance(vali, AnyOf):
             _anyof_kwargs(new_kwargs, vali)
+        if isinstance(vali, Optional):
+            pass
 
         if not 'data_trigger' in new_kwargs:
             _trigger_kwargs(new_kwargs)
-        if not 'parsley-error-message' in new_kwargs and vali.message is not None:
+        if not 'parsley-error-message' in new_kwargs \
+                and not isinstance(vali, Optional) \
+                and vali.message is not None:
             _message_kwargs(new_kwargs, message=vali.message)
 
     return new_kwargs
 
 
 def _email_kwargs(kwargs):
-    kwargs[u'parsley-type'] = u'email'
+    kwargs[u'data-parsley-type'] = u'email'
 
 
 def _equal_to_kwargs(kwargs, vali):
-    kwargs[u'parsley-equalto'] = u'#' + vali.fieldname
+    kwargs[u'data-parsley-equalto'] = u'#' + vali.fieldname
 
 
 def _ip_address_kwargs(kwargs):
     # Regexp from http://stackoverflow.com/a/4460645
-    kwargs[u'parsley-regexp'] =\
+    kwargs[u'data-parsley-regexp'] =\
         r'^\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.' \
         r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.' \
         r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.' \
@@ -80,20 +92,20 @@ def _length_kwargs(kwargs, vali):
     default_number = -1
 
     if vali.max != default_number and vali.min != default_number:
-        kwargs[u'parsley-rangelength'] = u'[' + str(vali.min) + u',' + str(vali.max) + u']'
+        kwargs[u'data-parsley-rangelength'] = u'[' + str(vali.min) + u',' + str(vali.max) + u']'
     else:
         if vali.max == default_number:
-            kwargs[u'parsley-minlength'] = str(vali.min)
+            kwargs[u'data-parsley-minlength'] = str(vali.min)
         if vali.min == default_number:
-            kwargs[u'parsley-maxlength'] = str(vali.max)
+            kwargs[u'data-parsley-maxlength'] = str(vali.max)
 
 
 def _number_range_kwargs(kwargs, vali):
-    kwargs[u'parsley-range'] = u'[' + str(vali.min) + u',' + str(vali.max) + u']'
+    kwargs[u'data-parsley-range'] = u'[' + str(vali.min) + u',' + str(vali.max) + u']'
 
 
 def _input_required_kwargs(kwargs):
-    kwargs[u'parsley-required'] = u'true'
+    kwargs[u'data-parsley-required'] = u'true'
 
 
 def _regexp_kwargs(kwargs, vali):
@@ -104,11 +116,11 @@ def _regexp_kwargs(kwargs, vali):
         regex_string = vali.regex.pattern
     else:
         regex_string = vali.regex
-    kwargs[u'parsley-regexp'] = regex_string
+    kwargs[u'data-parsley-regexp'] = regex_string
 
 
 def _url_kwargs(kwargs):
-    kwargs[u'parsley-type'] = u'url'
+    kwargs[u'data-parsley-type'] = u'url'
 
 
 def _string_seq_delimiter(vali, kwargs):
@@ -122,21 +134,21 @@ def _string_seq_delimiter(vali, kwargs):
             delimiter = fallback_delimiter
             break
     if delimiter != default_delimiter:
-        kwargs[u'parsley-inlist-delimiter'] = delimiter
+        kwargs[u'data-parsley-inlist-delimiter'] = delimiter
     return delimiter
 
 
 def _anyof_kwargs(kwargs, vali):
     delimiter = _string_seq_delimiter(vali, kwargs)
-    kwargs[u'parsley-inlist'] = delimiter.join(vali.values)
+    kwargs[u'data-parsley-inlist'] = delimiter.join(vali.values)
 
 
 def _trigger_kwargs(kwargs, trigger=u'change'):
-    kwargs[u'parsley-trigger'] = trigger
+    kwargs[u'data-parsley-trigger'] = trigger
 
 
 def _message_kwargs(kwargs, message):
-    kwargs[u'parsley-error-message'] = message
+    kwargs[u'data-parsley-error-message'] = message
 
 
 class ParsleyInputMixin(Input):
@@ -153,6 +165,14 @@ class PasswordInput(_PasswordInput, ParsleyInputMixin):
     pass
 
 
+class HiddenInput(_HiddenInput, ParsleyInputMixin):
+    pass
+
+
+class TextArea(_TextArea, ParsleyInputMixin):
+    pass
+
+
 class CheckboxInput(_CheckboxInput, ParsleyInputMixin):
     pass
 
@@ -163,6 +183,12 @@ class Select(_Select):
         return super(Select, self).__call__(field, **kwargs)
 
 
+class ListWidget(_ListWidget):
+    def __call__(self, field, **kwargs):
+        kwargs = parsley_kwargs(field, kwargs)
+        return super(ListWidget, self).__call__(field, **kwargs)
+
+
 class StringField(_StringField):
     def __init__(self, *args, **kwargs):
         super(StringField, self).__init__(widget=TextInput(), *args, **kwargs)
@@ -171,6 +197,11 @@ class StringField(_StringField):
 class IntegerField(_IntegerField):
     def __init__(self, *args, **kwargs):
         super(IntegerField, self).__init__(widget=TextInput(), *args, **kwargs)
+
+
+class RadioField(_RadioField):
+    def __init__(self, *args, **kwargs):
+        super(RadioField, self).__init__(widget=ListWidget(), *args, **kwargs)
 
 
 class BooleanField(_BooleanField):
@@ -191,6 +222,16 @@ class FloatField(_FloatField):
 class PasswordField(_PasswordField):
     def __init__(self, *args, **kwargs):
         super(PasswordField, self).__init__(widget=PasswordInput(), *args, **kwargs)
+
+
+class HiddenField(_PasswordField):
+    def __init__(self, *args, **kwargs):
+        super(PasswordField, self).__init__(widget=HiddenInput(), *args, **kwargs)
+
+
+class TextAreaField(_TextAreaField):
+    def __init__(self, *args, **kwargs):
+        super(TextAreaField, self).__init__(widget=TextArea(), *args, **kwargs)
 
 
 class SelectField(_SelectField):
