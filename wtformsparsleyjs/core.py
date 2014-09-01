@@ -226,7 +226,7 @@ class PasswordField(_PasswordField):
 
 class HiddenField(_PasswordField):
     def __init__(self, *args, **kwargs):
-        super(PasswordField, self).__init__(widget=HiddenInput(), *args, **kwargs)
+        super(HiddenField, self).__init__(widget=HiddenInput(), *args, **kwargs)
 
 
 class TextAreaField(_TextAreaField):
