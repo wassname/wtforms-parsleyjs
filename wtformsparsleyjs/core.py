@@ -205,7 +205,7 @@ class IntegerField(_IntegerField):
 
 class RadioField(_RadioField):
     def __init__(self, *args, **kwargs):
-        super(RadioField, self).__init__(widget=ListWidget(), *args, **kwargs)
+        super(RadioField, self).__init__(widget=_ListWidget(), *args, **kwargs)
         widget_kwargs = parsley_kwargs(self, {})
         self.option_widget = RadioInput(widget_kwargs)
 
