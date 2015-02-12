@@ -4,7 +4,7 @@ import re
 import copy
 
 from wtforms.validators import Length, NumberRange, Email, EqualTo, IPAddress, \
-    Regexp, URL, AnyOf, Optional
+    Regexp, URL, AnyOf, Optional, InputRequired
 try:
     from wtforms.validators import DataRequired
 except ImportError:
@@ -14,7 +14,8 @@ except ImportError:
 from wtforms import StringField
 from wtforms.widgets import TextInput as _TextInput, PasswordInput as _PasswordInput, \
     CheckboxInput as _CheckboxInput, Select as _Select, TextArea as _TextArea, \
-    ListWidget as _ListWidget, HiddenInput as _HiddenInput, Input
+    ListWidget as _ListWidget, HiddenInput as _HiddenInput, RadioInput as _RadioInput, \
+    Input
 from wtforms.fields import StringField as _StringField, BooleanField as _BooleanField, \
     DecimalField as _DecimalField, IntegerField as _IntegerField, \
     FloatField as _FloatField, PasswordField as _PasswordField, \
@@ -49,7 +50,7 @@ def parsley_kwargs(field, kwargs):
             _length_kwargs(new_kwargs, vali)
         if isinstance(vali, NumberRange):
             _number_range_kwargs(new_kwargs, vali)
-        if isinstance(vali, DataRequired):
+        if isinstance(vali, DataRequired) or isinstance(vali, InputRequired):
             _input_required_kwargs(new_kwargs)
             _trigger_kwargs(new_kwargs, u'key')
         if isinstance(vali, Regexp) and not 'data_regexp' in new_kwargs:
@@ -69,7 +70,6 @@ def parsley_kwargs(field, kwargs):
             _message_kwargs(new_kwargs, message=vali.message)
 
     return new_kwargs
-
 
 def _email_kwargs(kwargs):
     kwargs[u'data-parsley-type'] = u'email'
@@ -107,7 +107,6 @@ def _number_range_kwargs(kwargs, vali):
 def _input_required_kwargs(kwargs):
     kwargs[u'data-parsley-required'] = u'true'
 
-
 def _regexp_kwargs(kwargs, vali):
     # Apparently, this is the best way to check for RegexObject Type
     # It's needed because WTForms allows compiled regexps to be passed to the validator
@@ -118,10 +117,8 @@ def _regexp_kwargs(kwargs, vali):
         regex_string = vali.regex
     kwargs[u'data-parsley-regexp'] = regex_string
 
-
 def _url_kwargs(kwargs):
     kwargs[u'data-parsley-type'] = u'url'
-
 
 def _string_seq_delimiter(vali, kwargs):
     # We normally use a comma as the delimiter - looks clean and it's parsley's default.
@@ -176,6 +173,13 @@ class TextArea(_TextArea, ParsleyInputMixin):
 class CheckboxInput(_CheckboxInput, ParsleyInputMixin):
     pass
 
+class RadioInput(_RadioInput):
+    def __init__(self, parsley_options):
+        self.parsley_options = parsley_options
+
+    def __call__(self, field, **kwargs):
+        kwargs.update(self.parsley_options)
+        return super(RadioInput, self).__call__(field, **kwargs)
 
 class Select(_Select):
     def __call__(self, field, **kwargs):
@@ -201,7 +205,9 @@ class IntegerField(_IntegerField):
 
 class RadioField(_RadioField):
     def __init__(self, *args, **kwargs):
-        super(RadioField, self).__init__(widget=ListWidget(), *args, **kwargs)
+        super(RadioField, self).__init__(widget=_ListWidget(), *args, **kwargs)
+        widget_kwargs = parsley_kwargs(self, {})
+        self.option_widget = RadioInput(widget_kwargs)
 
 
 class BooleanField(_BooleanField):
