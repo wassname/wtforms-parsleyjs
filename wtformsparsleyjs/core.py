@@ -92,7 +92,7 @@ def _length_kwargs(kwargs, vali):
     default_number = -1
 
     if vali.max != default_number and vali.min != default_number:
-        kwargs[u'data-parsley-rangelength'] = u'[' + str(vali.min) + u',' + str(vali.max) + u']'
+        kwargs[u'data-parsley-length'] = u'[' + str(vali.min) + u',' + str(vali.max) + u']'
     else:
         if vali.max == default_number:
             kwargs[u'data-parsley-minlength'] = str(vali.min)
