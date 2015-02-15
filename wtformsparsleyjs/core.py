@@ -59,6 +59,8 @@ def parsley_kwargs(field, kwargs):
             _url_kwargs(new_kwargs)
         if isinstance(vali, AnyOf):
             _anyof_kwargs(new_kwargs, vali)
+        if isinstance(vali, MacAddress):
+            _mac_address_kwargs(new_kwargs)
         if isinstance(vali, Optional):
             pass
 
@@ -146,6 +148,9 @@ def _trigger_kwargs(kwargs, trigger=u'change'):
 
 def _message_kwargs(kwargs, message):
     kwargs[u'data-parsley-error-message'] = message
+
+def _mac_addresss_kwargs(kwargs):
+    kwargs[u'data-parsley-pattern'] = '^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$'
 
 
 class ParsleyInputMixin(Input):
