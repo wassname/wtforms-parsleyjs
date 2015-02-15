@@ -4,7 +4,7 @@ import re
 import copy
 
 from wtforms.validators import Length, NumberRange, Email, EqualTo, IPAddress, \
-    Regexp, URL, AnyOf, Optional, InputRequired
+    Regexp, URL, AnyOf, Optional, InputRequired, MacAddress
 try:
     from wtforms.validators import DataRequired
 except ImportError:
