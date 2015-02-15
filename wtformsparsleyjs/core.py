@@ -81,7 +81,7 @@ def _equal_to_kwargs(kwargs, vali):
 
 def _ip_address_kwargs(kwargs):
     # Regexp from http://stackoverflow.com/a/4460645
-    kwargs[u'data-parsley-regexp'] =\
+    kwargs[u'data-parsley-pattern'] =\
         r'^\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.' \
         r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.' \
         r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.' \
