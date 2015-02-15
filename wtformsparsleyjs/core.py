@@ -4,7 +4,7 @@ import re
 import copy
 
 from wtforms.validators import Length, NumberRange, Email, EqualTo, IPAddress, \
-    Regexp, URL, AnyOf, Optional, InputRequired, MacAddress
+    Regexp, URL, AnyOf, Optional, InputRequired, MacAddress, UUID
 try:
     from wtforms.validators import DataRequired
 except ImportError:
@@ -61,6 +61,8 @@ def parsley_kwargs(field, kwargs):
             _anyof_kwargs(new_kwargs, vali)
         if isinstance(vali, MacAddress):
             _mac_address_kwargs(new_kwargs)
+        if isinstance(vali, UUID):
+            _uuid_kwargs(new_kwargs)
         if isinstance(vali, Optional):
             pass
 
@@ -141,6 +143,11 @@ def _anyof_kwargs(kwargs, vali):
     delimiter = _string_seq_delimiter(vali, kwargs)
     kwargs[u'data-parsley-inlist'] = delimiter.join(vali.values)
 
+def _mac_addresss_kwargs(kwargs):
+    kwargs[u'data-parsley-pattern'] = '^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$'
+
+def _uuid_kwargs(kwargs):
+    kwargs[u'data-parsley-pattern'] = '^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$'
 
 def _trigger_kwargs(kwargs, trigger=u'change'):
     kwargs[u'data-parsley-trigger'] = trigger
@@ -148,10 +155,6 @@ def _trigger_kwargs(kwargs, trigger=u'change'):
 
 def _message_kwargs(kwargs, message):
     kwargs[u'data-parsley-error-message'] = message
-
-def _mac_addresss_kwargs(kwargs):
-    kwargs[u'data-parsley-pattern'] = '^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$'
-
 
 class ParsleyInputMixin(Input):
     def __call__(self, field, **kwargs):
