@@ -4,7 +4,7 @@ import re
 import copy
 
 from wtforms.validators import Length, NumberRange, Email, EqualTo, IPAddress, \
-    Regexp, URL, AnyOf, Optional, InputRequired, MacAddress, UUID
+    Regexp, URL, AnyOf, Optional, InputRequired, MacAddress, UUID, NoneOf
 try:
     from wtforms.validators import DataRequired
 except ImportError:
@@ -63,6 +63,8 @@ def parsley_kwargs(field, kwargs):
             _mac_address_kwargs(new_kwargs)
         if isinstance(vali, UUID):
             _uuid_kwargs(new_kwargs)
+        if isinstance(vali, NoneOf):
+            _none_of_kwargs(new_kwargs, vali)
         if isinstance(vali, Optional):
             pass
 
@@ -149,9 +151,13 @@ def _mac_addresss_kwargs(kwargs):
 def _uuid_kwargs(kwargs):
     kwargs[u'data-parsley-pattern'] = '^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$'
 
+def _none_of_kwargs(kwargs, vali):
+    delimiter = _string_seq_delimiter(vali, kwargs) 
+    #data-parsley-noneof is a custom validator, it can be found in scripts/parsley-noneof.js
+    kwargs[u'data-parsley-noneof'] = delimiter.join(vali.values)
+
 def _trigger_kwargs(kwargs, trigger=u'change'):
     kwargs[u'data-parsley-trigger'] = trigger
-
 
 def _message_kwargs(kwargs, message):
     kwargs[u'data-parsley-error-message'] = message
