@@ -43,6 +43,10 @@ def parsley_kwargs(field, kwargs):
 
     if isinstance(field, DateField) or isinstance(field, DateTimeField):
         _date_kwargs(new_kwargs, field)
+    if isinstance(field, IntegerField):
+        _integer_kwargs(new_kwargs)
+    if isinstance(field, DecimalField) or isinstance(field, FloatField):
+        _number_kwargs(new_kwargs)
 
     for vali in field.validators:
         if isinstance(vali, Email):
@@ -169,6 +173,12 @@ def _message_kwargs(kwargs, message):
 
 def _date_kwargs(kwargs, field):
     kwargs[u'data-parsley-datefield'] = field.format
+
+def _integer_kwargs(kwargs):
+    kwargs[u'data-parsley-type'] = "integer"
+
+def _number_kwargs(kwargs):
+    kwargs[u'data-parsley-type'] = "number"
 
 class ParsleyInputMixin(Input):
     def __call__(self, field, **kwargs):
