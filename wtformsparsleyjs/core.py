@@ -29,7 +29,7 @@ def parsley_kwargs(field, kwargs):
 
     Generate *kwargs* from the validators present for the widget.
 
-    Note that the regex validation relies on the regex pattern being compatible with
+    Note that the regex validation relies on the eegex pattern being compatible with
     both ECMA script and Python. The regex is not converted in any way.
     It's possible to simply supply your own "parsley-regexp" keyword to the field
     to explicitly provide the ECMA script regex.
@@ -115,7 +115,7 @@ def _regexp_kwargs(kwargs, vali):
         regex_string = vali.regex.pattern
     else:
         regex_string = vali.regex
-    kwargs[u'data-parsley-regexp'] = regex_string
+    kwargs[u'data-parsley-pattern'] = regex_string
 
 def _url_kwargs(kwargs):
     kwargs[u'data-parsley-type'] = u'url'
