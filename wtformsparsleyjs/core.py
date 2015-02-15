@@ -20,7 +20,8 @@ from wtforms.fields import StringField as _StringField, BooleanField as _Boolean
     DecimalField as _DecimalField, IntegerField as _IntegerField, \
     FloatField as _FloatField, PasswordField as _PasswordField, \
     SelectField as _SelectField, TextAreaField as _TextAreaField, \
-    RadioField as _RadioField
+    RadioField as _RadioField, DateField as _DateField, \
+    DateTimeField as _DateTimeField
 
 
 def parsley_kwargs(field, kwargs):
@@ -39,6 +40,10 @@ def parsley_kwargs(field, kwargs):
     one. Do check if the behaviour suits your needs.
     """
     new_kwargs = copy.deepcopy(kwargs)
+
+    if isinstance(field, DateField) or isinstance(field, DateTimeField):
+        _date_kwargs(new_kwargs, field)
+
     for vali in field.validators:
         if isinstance(vali, Email):
             _email_kwargs(new_kwargs)
@@ -162,6 +167,9 @@ def _trigger_kwargs(kwargs, trigger=u'change'):
 def _message_kwargs(kwargs, message):
     kwargs[u'data-parsley-error-message'] = message
 
+def _date_kwargs(kwargs, field):
+    kwargs[u'data-parsley-datefield'] = field.format
+
 class ParsleyInputMixin(Input):
     def __call__(self, field, **kwargs):
         kwargs = parsley_kwargs(field, kwargs)
@@ -257,3 +265,14 @@ class TextAreaField(_TextAreaField):
 class SelectField(_SelectField):
     def __init__(self, *args, **kwargs):
         super(SelectField, self).__init__(widget=Select(), *args, **kwargs)
+
+
+class DateTimeField(_DateTimeField):
+    def __init__(self, *args, **kwargs):
+        super(DateTimeField, self).__init__(widget=TextInput(), *args, **kwargs)
+
+
+class DateField(_DateField):
+    def __init__(self, *args, **kwargs):
+        super(DateField, self).__init__(widget=TextInput(), *args, **kwargs)
+
