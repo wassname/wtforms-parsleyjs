@@ -11,17 +11,17 @@ except ImportError:
     # wtforms < 2.x
     from wtforms.validators import Required as DataRequired
 
-from wtforms import StringField
 from wtforms.widgets import TextInput as _TextInput, PasswordInput as _PasswordInput, \
     CheckboxInput as _CheckboxInput, Select as _Select, TextArea as _TextArea, \
     ListWidget as _ListWidget, HiddenInput as _HiddenInput, RadioInput as _RadioInput, \
-    Input
+    FileInput as _FileInput, Input
+
 from wtforms.fields import StringField as _StringField, BooleanField as _BooleanField, \
     DecimalField as _DecimalField, IntegerField as _IntegerField, \
     FloatField as _FloatField, PasswordField as _PasswordField, \
     SelectField as _SelectField, TextAreaField as _TextAreaField, \
     RadioField as _RadioField, DateField as _DateField, \
-    DateTimeField as _DateTimeField
+    DateTimeField as _DateTimeField, FileField as _FileField
 
 
 def parsley_kwargs(field, kwargs):
@@ -225,6 +225,10 @@ class ListWidget(_ListWidget):
         return super(ListWidget, self).__call__(field, **kwargs)
 
 
+def FileInput(_FileInput, ParsleyInputMixin):
+    pass
+
+
 class StringField(_StringField):
     def __init__(self, *args, **kwargs):
         super(StringField, self).__init__(widget=TextInput(), *args, **kwargs)
@@ -285,4 +289,9 @@ class DateTimeField(_DateTimeField):
 class DateField(_DateField):
     def __init__(self, *args, **kwargs):
         super(DateField, self).__init__(widget=TextInput(), *args, **kwargs)
+
+
+class FileField(_FileField):
+    def __init__(self, *args, **kwargs):
+        super(FileField, self).__init__(widget=FileInput(), *args, **kwargs)
 
