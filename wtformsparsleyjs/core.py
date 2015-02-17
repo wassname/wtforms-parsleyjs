@@ -138,7 +138,7 @@ def _url_kwargs(kwargs):
 
 def _anyof_kwargs(kwargs, vali):
     # The inlist validator is no longer available in Parsley 2.x, so a custom anyof validator is used.
-    kwargs[u'data-parsley-anyof'] = u"[" + u",".join(vali.values) + u"]"
+    kwargs[u'data-parsley-anyof'] = json.dumps(vali.values)
 
 def _mac_address_kwargs(kwargs):
     kwargs[u'data-parsley-pattern'] = '^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$'
@@ -148,7 +148,7 @@ def _uuid_kwargs(kwargs):
 
 def _none_of_kwargs(kwargs, vali):
     #data-parsley-noneof is a custom validator, it can be found in scripts/parsley-noneof.js
-    kwargs[u'data-parsley-noneof'] = u"[" + u",".join(vali.values) + u"]"
+    kwargs[u'data-parsley-noneof'] = json.dumps(vali.values)
 
 def _trigger_kwargs(kwargs, trigger=u'change'):
     kwargs[u'data-parsley-trigger'] = trigger
