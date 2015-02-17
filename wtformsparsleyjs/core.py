@@ -153,6 +153,7 @@ def _string_seq_delimiter(vali, kwargs):
 
 def _anyof_kwargs(kwargs, vali):
     delimiter = _string_seq_delimiter(vali, kwargs)
+    # This is out of date, inlist is a 1.x validator, have yet to find a 2.x alternative, may have to write a custom validator
     kwargs[u'data-parsley-inlist'] = delimiter.join(vali.values)
 
 def _mac_address_kwargs(kwargs):
@@ -164,7 +165,7 @@ def _uuid_kwargs(kwargs):
 def _none_of_kwargs(kwargs, vali):
     delimiter = _string_seq_delimiter(vali, kwargs) 
     #data-parsley-noneof is a custom validator, it can be found in scripts/parsley-noneof.js
-    kwargs[u'data-parsley-noneof'] = delimiter.join(vali.values)
+    kwargs[u'data-parsley-noneof'] = u"[" + delimiter.join(vali.values) + u"]"
 
 def _trigger_kwargs(kwargs, trigger=u'change'):
     kwargs[u'data-parsley-trigger'] = trigger
@@ -200,8 +201,10 @@ class HiddenInput(_HiddenInput, ParsleyInputMixin):
     pass
 
 
-class TextArea(_TextArea, ParsleyInputMixin):
-    pass
+class TextArea(_TextArea):
+    def __call__(self, field, **kwargs):
+        kwargs = parsley_kwargs(field, kwargs)
+        return super(TextArea, self).__call__(field, **kwargs)
 
 
 class CheckboxInput(_CheckboxInput, ParsleyInputMixin):
@@ -227,8 +230,10 @@ class ListWidget(_ListWidget):
         return super(ListWidget, self).__call__(field, **kwargs)
 
 
-class FileInput(_FileInput, ParsleyInputMixin):
-    pass
+class FileInput(_FileInput):
+    def __call__(self, field, **kwargs):
+        kwargs = parsley_kwargs(field, kwargs)
+        return super(FileInput, self).__call__(field, **kwargs)
 
 
 class StringField(_StringField):
