@@ -155,7 +155,7 @@ def _anyof_kwargs(kwargs, vali):
     delimiter = _string_seq_delimiter(vali, kwargs)
     kwargs[u'data-parsley-inlist'] = delimiter.join(vali.values)
 
-def _mac_addresss_kwargs(kwargs):
+def _mac_address_kwargs(kwargs):
     kwargs[u'data-parsley-pattern'] = '^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$'
 
 def _uuid_kwargs(kwargs):
