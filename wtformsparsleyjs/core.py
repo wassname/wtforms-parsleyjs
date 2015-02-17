@@ -136,25 +136,9 @@ def _regexp_kwargs(kwargs, vali):
 def _url_kwargs(kwargs):
     kwargs[u'data-parsley-type'] = u'url'
 
-def _string_seq_delimiter(vali, kwargs):
-    # We normally use a comma as the delimiter - looks clean and it's parsley's default.
-    # If the strings for which we check contain a comma, we cannot use it as a delimiter.
-    default_delimiter = u','
-    fallback_delimiter = u';;;'
-    delimiter = default_delimiter
-    for value in vali.values:
-        if value.find(',') != -1:
-            delimiter = fallback_delimiter
-            break
-    if delimiter != default_delimiter:
-        kwargs[u'data-parsley-inlist-delimiter'] = delimiter
-    return delimiter
-
-
 def _anyof_kwargs(kwargs, vali):
-    delimiter = _string_seq_delimiter(vali, kwargs)
-    # This is out of date, inlist is a 1.x validator, have yet to find a 2.x alternative, may have to write a custom validator
-    kwargs[u'data-parsley-inlist'] = delimiter.join(vali.values)
+    # The inlist validator is no longer available in Parsley 2.x, so a custom anyof validator is used.
+    kwargs[u'data-parsley-anyof'] = u"[" + u",".join(vali.values) + u"]"
 
 def _mac_address_kwargs(kwargs):
     kwargs[u'data-parsley-pattern'] = '^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$'
@@ -163,9 +147,8 @@ def _uuid_kwargs(kwargs):
     kwargs[u'data-parsley-pattern'] = '^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$'
 
 def _none_of_kwargs(kwargs, vali):
-    delimiter = _string_seq_delimiter(vali, kwargs) 
     #data-parsley-noneof is a custom validator, it can be found in scripts/parsley-noneof.js
-    kwargs[u'data-parsley-noneof'] = u"[" + delimiter.join(vali.values) + u"]"
+    kwargs[u'data-parsley-noneof'] = u"[" + u",".join(vali.values) + u"]"
 
 def _trigger_kwargs(kwargs, trigger=u'change'):
     kwargs[u'data-parsley-trigger'] = trigger
