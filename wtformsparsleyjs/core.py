@@ -21,7 +21,8 @@ from wtforms.fields import StringField as _StringField, BooleanField as _Boolean
     FloatField as _FloatField, PasswordField as _PasswordField, \
     SelectField as _SelectField, TextAreaField as _TextAreaField, \
     RadioField as _RadioField, DateField as _DateField, \
-    DateTimeField as _DateTimeField, FileField as _FileField
+    DateTimeField as _DateTimeField, FileField as _FileField, \
+    SelectMultipleField as _SelectMultipleField
 
 
 def parsley_kwargs(field, kwargs):
@@ -294,4 +295,9 @@ class DateField(_DateField):
 class FileField(_FileField):
     def __init__(self, *args, **kwargs):
         super(FileField, self).__init__(widget=FileInput(), *args, **kwargs)
+
+
+class SelectMultipleField(_SelectMultipleField):
+    def __init__(self, *args, **kwargs):
+        super(SelectMultipleField, self).__init__(widget=Select(), *args, **kwargs)
 
