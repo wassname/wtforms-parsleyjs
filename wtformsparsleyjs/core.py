@@ -2,6 +2,7 @@ __author__ = 'Johannes Gehrs (jgehrs@gmail.com)'
 
 import re
 import copy
+import json 
 
 from wtforms.validators import Length, NumberRange, Email, EqualTo, IPAddress, \
     Regexp, URL, AnyOf, Optional, InputRequired, MacAddress, UUID, NoneOf
