@@ -181,6 +181,7 @@ def _integer_kwargs(kwargs):
 def _number_kwargs(kwargs):
     kwargs[u'data-parsley-type'] = "number"
 
+
 class ParsleyInputMixin(Input):
     def __call__(self, field, **kwargs):
         kwargs = parsley_kwargs(field, kwargs)
@@ -226,7 +227,7 @@ class ListWidget(_ListWidget):
         return super(ListWidget, self).__call__(field, **kwargs)
 
 
-def FileInput(_FileInput, ParsleyInputMixin):
+class FileInput(_FileInput, ParsleyInputMixin):
     pass
 
 
