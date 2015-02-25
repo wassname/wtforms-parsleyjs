@@ -289,5 +289,5 @@ class FileField(_FileField):
 
 class SelectMultipleField(_SelectMultipleField):
     def __init__(self, *args, **kwargs):
-        super(SelectMultipleField, self).__init__(widget=Select(), *args, **kwargs)
+        super(SelectMultipleField, self).__init__(widget=Select(multiple=True), *args, **kwargs)
 
