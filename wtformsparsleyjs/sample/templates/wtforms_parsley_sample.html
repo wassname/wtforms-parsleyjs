@@ -5,18 +5,9 @@
     {% from "_formhelpers.html" import render_field, render_checkbox %}
     <form method=post action="{{ url_for('parsley_testform') }}">
         <fieldset>
-            {{ render_field(form.email) }}
-            {{ render_field(form.first_value) }}
-            {{ render_field(form.second_value) }}
-            {{ render_field(form.ip_address) }}
-            {{ render_field(form.string_length) }}
-            {{ render_field(form.number_range) }}
-            {{ render_field(form.required_text) }}
-            {{ render_field(form.required_select) }}
-            {{ render_field(form.required_checkbox) }}
-            {{ render_field(form.regexp) }}
-            {{ render_field(form.url) }}
-            {{ render_field(form.anyof) }}
+            {% for field in form %}
+                {{ render_field(field) }}
+            {% endfor %}
             <p><input type=submit value=Submit>
         </fieldset>
     </form>
