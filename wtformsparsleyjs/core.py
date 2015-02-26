@@ -49,6 +49,8 @@ def parsley_kwargs(field, kwargs):
         _integer_kwargs(new_kwargs)
     if isinstance(field, DecimalField) or isinstance(field, FloatField):
         _number_kwargs(new_kwargs)
+    if not 'data_trigger' in new_kwargs:
+        _trigger_kwargs(new_kwargs)
 
     for vali in field.validators:
         if isinstance(vali, Email):
@@ -79,8 +81,6 @@ def parsley_kwargs(field, kwargs):
         if isinstance(vali, Optional):
             pass
 
-        if not 'data_trigger' in new_kwargs:
-            _trigger_kwargs(new_kwargs)
         if not 'parsley-error-message' in new_kwargs \
                 and not isinstance(vali, Optional) \
                 and vali.message is not None:
