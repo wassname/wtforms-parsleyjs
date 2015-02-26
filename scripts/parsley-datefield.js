@@ -27,7 +27,6 @@ $(document).ready(function() {
             if (!d) throw Error("Unknown format descripter: " + fd);
             return '(' + d + ')';
         }), 'i');
-        console.log(re)
         return re.test(str);
     }, 32).addMessage('en', 'datefield', 'The input needs to be in the correct date format.')
 });
