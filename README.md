@@ -1,4 +1,4 @@
-# WTForms-ParsleyJS
+# WTForms-ParsleyJS 2.0
 
 ## What is this?
 
@@ -16,32 +16,13 @@ This library will generate the necesssary HTML attributes from your WTForms vali
 
 ## Installation
 
-You can install from [pypi](https://pypi.python.org/pypi/WTForms-ParsleyJS) using 
+You can install from [pypi](https://pypi.python.org/pypi/WTForms-ParsleyJS) using
 
 `pip install wtforms-parsleyjs`
 
 ## What is supported?
 
-The following WTForms validators are supported:
-
-* E-Mail Address
-* Matching values
-* IP4 Address
-* Length of string
-* Required field
-* Regexp (see limitations)
-* URL
-* `AnyOf`
-
-The `NoneOf` validator is not supported because this functionality is not supported by ParsleyJS.
-
-The following WTForms widgets are supported:
-
-* TextInput
-* Select
-* CheckboxInput
-
-Radio Buttons are not supported.
+All validators documented by WTForms are supported, all documented fields are also supported, with the exception of SubmitField. The reason SubmitField is not included is because I see no use case to validate Submit client side.
 
 ## How to use it?
 
@@ -67,9 +48,9 @@ WTForms-ParsleyJS has been developed and run solely on Python 2.7 - but it may w
 
 ## Dependencies
 
-Of course ParsleyJS and WTForms are required. ParsleyJS in turn requires jQuery. 
+Of course ParsleyJS and WTForms are required. ParsleyJS in turn requires jQuery.
 
-The `AnyOf` validator requires parsleys extra validators which are distributed in a seperate file.
+If you wish to use AnyOf validator, NoneOf validator, DateField or DateTimeField then you need to include their matching ParsleyJS plugins, found in the scripts folder.
 
 The sample uses the [Flask web framework](http://flask.pocoo.org/docs/) and [Twitter Bootstrap](http://twitter.github.io/bootstrap/). Because the sample should run out of the box on Heroku, ParsleyJS is included as a git submodule.
 
