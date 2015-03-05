@@ -2,25 +2,28 @@ __author__ = 'Johannes Gehrs (jgehrs@gmail.com)'
 
 import re
 import copy
+import json 
 
 from wtforms.validators import Length, NumberRange, Email, EqualTo, IPAddress, \
-    Regexp, URL, AnyOf, Optional, InputRequired
+    Regexp, URL, AnyOf, Optional, InputRequired, MacAddress, UUID, NoneOf
 try:
     from wtforms.validators import DataRequired
 except ImportError:
     # wtforms < 2.x
     from wtforms.validators import Required as DataRequired
 
-from wtforms import StringField
 from wtforms.widgets import TextInput as _TextInput, PasswordInput as _PasswordInput, \
     CheckboxInput as _CheckboxInput, Select as _Select, TextArea as _TextArea, \
     ListWidget as _ListWidget, HiddenInput as _HiddenInput, RadioInput as _RadioInput, \
-    Input
+    FileInput as _FileInput, Input
+
 from wtforms.fields import StringField as _StringField, BooleanField as _BooleanField, \
     DecimalField as _DecimalField, IntegerField as _IntegerField, \
     FloatField as _FloatField, PasswordField as _PasswordField, \
     SelectField as _SelectField, TextAreaField as _TextAreaField, \
-    RadioField as _RadioField
+    RadioField as _RadioField, DateField as _DateField, \
+    DateTimeField as _DateTimeField, FileField as _FileField, \
+    SelectMultipleField as _SelectMultipleField
 
 
 def parsley_kwargs(field, kwargs):
@@ -39,6 +42,16 @@ def parsley_kwargs(field, kwargs):
     one. Do check if the behaviour suits your needs.
     """
     new_kwargs = copy.deepcopy(kwargs)
+
+    if isinstance(field, DateField) or isinstance(field, DateTimeField):
+        _date_kwargs(new_kwargs, field)
+    if isinstance(field, IntegerField):
+        _integer_kwargs(new_kwargs)
+    if isinstance(field, DecimalField) or isinstance(field, FloatField):
+        _number_kwargs(new_kwargs)
+    if not 'data_trigger' in new_kwargs:
+        _trigger_kwargs(new_kwargs)
+
     for vali in field.validators:
         if isinstance(vali, Email):
             _email_kwargs(new_kwargs)
@@ -59,11 +72,15 @@ def parsley_kwargs(field, kwargs):
             _url_kwargs(new_kwargs)
         if isinstance(vali, AnyOf):
             _anyof_kwargs(new_kwargs, vali)
+        if isinstance(vali, MacAddress):
+            _mac_address_kwargs(new_kwargs)
+        if isinstance(vali, UUID):
+            _uuid_kwargs(new_kwargs)
+        if isinstance(vali, NoneOf):
+            _none_of_kwargs(new_kwargs, vali)
         if isinstance(vali, Optional):
             pass
 
-        if not 'data_trigger' in new_kwargs:
-            _trigger_kwargs(new_kwargs)
         if not 'parsley-error-message' in new_kwargs \
                 and not isinstance(vali, Optional) \
                 and vali.message is not None:
@@ -81,7 +98,7 @@ def _equal_to_kwargs(kwargs, vali):
 
 def _ip_address_kwargs(kwargs):
     # Regexp from http://stackoverflow.com/a/4460645
-    kwargs[u'data-parsley-regexp'] =\
+    kwargs[u'data-parsley-pattern'] =\
         r'^\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.' \
         r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.' \
         r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.' \
@@ -115,37 +132,39 @@ def _regexp_kwargs(kwargs, vali):
         regex_string = vali.regex.pattern
     else:
         regex_string = vali.regex
-    kwargs[u'data-parsley-regexp'] = regex_string
+    kwargs[u'data-parsley-pattern'] = regex_string
 
 def _url_kwargs(kwargs):
     kwargs[u'data-parsley-type'] = u'url'
 
-def _string_seq_delimiter(vali, kwargs):
-    # We normally use a comma as the delimiter - looks clean and it's parsley's default.
-    # If the strings for which we check contain a comma, we cannot use it as a delimiter.
-    default_delimiter = u','
-    fallback_delimiter = u';;;'
-    delimiter = default_delimiter
-    for value in vali.values:
-        if value.find(',') != -1:
-            delimiter = fallback_delimiter
-            break
-    if delimiter != default_delimiter:
-        kwargs[u'data-parsley-inlist-delimiter'] = delimiter
-    return delimiter
-
-
 def _anyof_kwargs(kwargs, vali):
-    delimiter = _string_seq_delimiter(vali, kwargs)
-    kwargs[u'data-parsley-inlist'] = delimiter.join(vali.values)
+    # The inlist validator is no longer available in Parsley 2.x, so a custom anyof validator is used.
+    kwargs[u'data-parsley-anyof'] = json.dumps(vali.values)
 
+def _mac_address_kwargs(kwargs):
+    kwargs[u'data-parsley-pattern'] = '^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$'
+
+def _uuid_kwargs(kwargs):
+    kwargs[u'data-parsley-pattern'] = '^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$'
+
+def _none_of_kwargs(kwargs, vali):
+    #data-parsley-noneof is a custom validator, it can be found in scripts/parsley-noneof.js
+    kwargs[u'data-parsley-noneof'] = json.dumps(vali.values)
 
 def _trigger_kwargs(kwargs, trigger=u'change'):
     kwargs[u'data-parsley-trigger'] = trigger
 
-
 def _message_kwargs(kwargs, message):
     kwargs[u'data-parsley-error-message'] = message
+
+def _date_kwargs(kwargs, field):
+    kwargs[u'data-parsley-datefield'] = field.format
+
+def _integer_kwargs(kwargs):
+    kwargs[u'data-parsley-type'] = "integer"
+
+def _number_kwargs(kwargs):
+    kwargs[u'data-parsley-type'] = "number"
 
 
 class ParsleyInputMixin(Input):
@@ -166,8 +185,10 @@ class HiddenInput(_HiddenInput, ParsleyInputMixin):
     pass
 
 
-class TextArea(_TextArea, ParsleyInputMixin):
-    pass
+class TextArea(_TextArea):
+    def __call__(self, field, **kwargs):
+        kwargs = parsley_kwargs(field, kwargs)
+        return super(TextArea, self).__call__(field, **kwargs)
 
 
 class CheckboxInput(_CheckboxInput, ParsleyInputMixin):
@@ -191,6 +212,12 @@ class ListWidget(_ListWidget):
     def __call__(self, field, **kwargs):
         kwargs = parsley_kwargs(field, kwargs)
         return super(ListWidget, self).__call__(field, **kwargs)
+
+
+class FileInput(_FileInput):
+    def __call__(self, field, **kwargs):
+        kwargs = parsley_kwargs(field, kwargs)
+        return super(FileInput, self).__call__(field, **kwargs)
 
 
 class StringField(_StringField):
@@ -243,3 +270,24 @@ class TextAreaField(_TextAreaField):
 class SelectField(_SelectField):
     def __init__(self, *args, **kwargs):
         super(SelectField, self).__init__(widget=Select(), *args, **kwargs)
+
+
+class DateTimeField(_DateTimeField):
+    def __init__(self, *args, **kwargs):
+        super(DateTimeField, self).__init__(widget=TextInput(), *args, **kwargs)
+
+
+class DateField(_DateField):
+    def __init__(self, *args, **kwargs):
+        super(DateField, self).__init__(widget=TextInput(), *args, **kwargs)
+
+
+class FileField(_FileField):
+    def __init__(self, *args, **kwargs):
+        super(FileField, self).__init__(widget=FileInput(), *args, **kwargs)
+
+
+class SelectMultipleField(_SelectMultipleField):
+    def __init__(self, *args, **kwargs):
+        super(SelectMultipleField, self).__init__(widget=Select(multiple=True), *args, **kwargs)
+
