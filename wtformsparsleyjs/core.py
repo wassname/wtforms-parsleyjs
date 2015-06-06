@@ -2,7 +2,7 @@ __author__ = 'Johannes Gehrs (jgehrs@gmail.com)'
 
 import re
 import copy
-import json 
+import json
 
 from wtforms.validators import Length, NumberRange, Email, EqualTo, IPAddress, \
     Regexp, URL, AnyOf, Optional, InputRequired, MacAddress, UUID, NoneOf
@@ -226,68 +226,94 @@ class StringField(_StringField):
 
 
 class IntegerField(_IntegerField):
+    widget = TextInput()
+
     def __init__(self, *args, **kwargs):
-        super(IntegerField, self).__init__(widget=TextInput(), *args, **kwargs)
+        super(IntegerField, self).__init__(*args, **kwargs)
 
 
 class RadioField(_RadioField):
+    widget = _ListWidget()
+
     def __init__(self, *args, **kwargs):
-        super(RadioField, self).__init__(widget=_ListWidget(), *args, **kwargs)
+        super(RadioField, self).__init__(*args, **kwargs)
         widget_kwargs = parsley_kwargs(self, {})
         self.option_widget = RadioInput(widget_kwargs)
 
 
 class BooleanField(_BooleanField):
+    widget = CheckboxInput()
+
     def __init__(self, *args, **kwargs):
-        super(BooleanField, self).__init__(widget=CheckboxInput(), *args, **kwargs)
+        super(BooleanField, self).__init__(*args, **kwargs)
 
 
 class DecimalField(_DecimalField):
+    widget = TextInput()
+
     def __init__(self, *args, **kwargs):
-        super(DecimalField, self).__init__(widget=TextInput(), *args, **kwargs)
+        super(DecimalField, self).__init__(*args, **kwargs)
 
 
 class FloatField(_FloatField):
+    widget = TextInput()
+
     def __init__(self, *args, **kwargs):
-        super(FloatField, self).__init__(widget=TextInput(), *args, **kwargs)
+        super(FloatField, self).__init__(*args, **kwargs)
 
 
 class PasswordField(_PasswordField):
+    widget = PasswordInput()
+
     def __init__(self, *args, **kwargs):
-        super(PasswordField, self).__init__(widget=PasswordInput(), *args, **kwargs)
+        super(PasswordField, self).__init__(*args, **kwargs)
 
 
 class HiddenField(_PasswordField):
+    widget = HiddenInput()
+
     def __init__(self, *args, **kwargs):
-        super(HiddenField, self).__init__(widget=HiddenInput(), *args, **kwargs)
+        super(HiddenField, self).__init__(*args, **kwargs)
 
 
 class TextAreaField(_TextAreaField):
+    widget = TextArea()
+
     def __init__(self, *args, **kwargs):
-        super(TextAreaField, self).__init__(widget=TextArea(), *args, **kwargs)
+        super(TextAreaField, self).__init__(*args, **kwargs)
 
 
 class SelectField(_SelectField):
+    widget = Select()
+
     def __init__(self, *args, **kwargs):
-        super(SelectField, self).__init__(widget=Select(), *args, **kwargs)
+        super(SelectField, self).__init__(*args, **kwargs)
 
 
 class DateTimeField(_DateTimeField):
+    widget = TextInput()
+
     def __init__(self, *args, **kwargs):
-        super(DateTimeField, self).__init__(widget=TextInput(), *args, **kwargs)
+        super(DateTimeField, self).__init__(*args, **kwargs)
 
 
 class DateField(_DateField):
+    widget = TextInput()
+
     def __init__(self, *args, **kwargs):
-        super(DateField, self).__init__(widget=TextInput(), *args, **kwargs)
+        super(DateField, self).__init__(*args, **kwargs)
 
 
 class FileField(_FileField):
+    widget = FileInput()
+
     def __init__(self, *args, **kwargs):
-        super(FileField, self).__init__(widget=FileInput(), *args, **kwargs)
+        super(FileField, self).__init__(*args, **kwargs)
 
 
 class SelectMultipleField(_SelectMultipleField):
+    widget = Select(multiple=True)
+
     def __init__(self, *args, **kwargs):
-        super(SelectMultipleField, self).__init__(widget=Select(multiple=True), *args, **kwargs)
+        super(SelectMultipleField, self).__init__(*args, **kwargs)
 
