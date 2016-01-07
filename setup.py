@@ -19,7 +19,7 @@ from setuptools import setup
 
 setup(
     name='WTForms-ParsleyJS',
-    version='0.1.5',
+    version='2.0.1',
     url='https://github.com/johannes-gehrs/wtforms-parsleyjs',
     license='MIT',
     author='Johannes Gehrs',
