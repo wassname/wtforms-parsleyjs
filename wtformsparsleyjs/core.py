@@ -25,6 +25,16 @@ from wtforms.fields import StringField as _StringField, BooleanField as _Boolean
     DateTimeField as _DateTimeField, FileField as _FileField, \
     SelectMultipleField as _SelectMultipleField
 
+from wtforms.fields.html5 import URLField as _URLField, EmailField as _EmailField, \
+    DecimalRangeField as _DecimalRangeField, SearchField as _SearchField, \
+    TelField as _TelField, IntegerRangeField as _IntegerRangeField
+
+from wtforms.widgets.html5 import ColorInput as _ColorInput, DateInput as _DateInput, \
+    DateTimeInput as _DateTimeInput, EmailInput as _EmailInput, \
+    RangeInput as _RangeInput, TelInput as _TelInput, URLInput as _UrlInput, \
+    NumberInput as _NumberInput, SearchInput as _SearchInput, TimeInput as _TimeInput, \
+    WeekInput as _WeekInput
+
 
 def parsley_kwargs(field, kwargs):
     """
@@ -88,6 +98,7 @@ def parsley_kwargs(field, kwargs):
 
     return new_kwargs
 
+
 def _email_kwargs(kwargs):
     kwargs[u'data-parsley-type'] = u'email'
 
@@ -124,6 +135,7 @@ def _number_range_kwargs(kwargs, vali):
 def _input_required_kwargs(kwargs):
     kwargs[u'data-parsley-required'] = u'true'
 
+
 def _regexp_kwargs(kwargs, vali):
     # Apparently, this is the best way to check for RegexObject Type
     # It's needed because WTForms allows compiled regexps to be passed to the validator
@@ -134,34 +146,44 @@ def _regexp_kwargs(kwargs, vali):
         regex_string = vali.regex
     kwargs[u'data-parsley-pattern'] = regex_string
 
+
 def _url_kwargs(kwargs):
     kwargs[u'data-parsley-type'] = u'url'
+
 
 def _anyof_kwargs(kwargs, vali):
     # The inlist validator is no longer available in Parsley 2.x, so a custom anyof validator is used.
     kwargs[u'data-parsley-anyof'] = json.dumps(vali.values)
 
+
 def _mac_address_kwargs(kwargs):
     kwargs[u'data-parsley-pattern'] = '^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$'
+
 
 def _uuid_kwargs(kwargs):
     kwargs[u'data-parsley-pattern'] = '^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$'
 
+
 def _none_of_kwargs(kwargs, vali):
-    #data-parsley-noneof is a custom validator, it can be found in scripts/parsley-noneof.js
+    # data-parsley-noneof is a custom validator, it can be found in scripts/parsley-noneof.js
     kwargs[u'data-parsley-noneof'] = json.dumps(vali.values)
+
 
 def _trigger_kwargs(kwargs, trigger=u'change'):
     kwargs[u'data-parsley-trigger'] = trigger
 
+
 def _message_kwargs(kwargs, message):
     kwargs[u'data-parsley-error-message'] = message
+
 
 def _date_kwargs(kwargs, field):
     kwargs[u'data-parsley-datefield'] = field.format
 
+
 def _integer_kwargs(kwargs):
     kwargs[u'data-parsley-type'] = "integer"
+
 
 def _number_kwargs(kwargs):
     kwargs[u'data-parsley-type'] = "number"
@@ -194,6 +216,51 @@ class TextArea(_TextArea):
 class CheckboxInput(_CheckboxInput, ParsleyInputMixin):
     pass
 
+
+class ColorInput(_ColorInput, ParsleyInputMixin):
+    pass
+
+
+class DateInput(_DateInput, ParsleyInputMixin):
+    pass
+
+
+class DateTimeInput(_DateTimeInput, ParsleyInputMixin):
+    pass
+
+
+class EmailInput(_EmailInput, ParsleyInputMixin):
+    pass
+
+
+class RangeInput(_RangeInput, ParsleyInputMixin):
+    pass
+
+
+class TelInput(_TelInput, ParsleyInputMixin):
+    pass
+
+
+class URLInput(_UrlInput, ParsleyInputMixin):
+    pass
+
+
+class NumberInput(_NumberInput, ParsleyInputMixin):
+    pass
+
+
+class TimeInput(_TimeInput, ParsleyInputMixin):
+    pass
+
+
+class WeekInput(_WeekInput, ParsleyInputMixin):
+    pass
+
+
+class SearchInput(_SearchInput, ParsleyInputMixin):
+    pass
+
+
 class RadioInput(_RadioInput):
     def __init__(self, parsley_options):
         self.parsley_options = parsley_options
@@ -201,6 +268,7 @@ class RadioInput(_RadioInput):
     def __call__(self, field, **kwargs):
         kwargs.update(self.parsley_options)
         return super(RadioInput, self).__call__(field, **kwargs)
+
 
 class Select(_Select):
     def __call__(self, field, **kwargs):
@@ -317,3 +385,44 @@ class SelectMultipleField(_SelectMultipleField):
     def __init__(self, *args, **kwargs):
         super(SelectMultipleField, self).__init__(*args, **kwargs)
 
+
+class URLField(_URLField):
+    widget = URLInput()
+
+    def __init__(self, *args, **kwargs):
+        super(URLField, self).__init__(*args, **kwargs)
+
+
+class TelField(_TelField):
+    widget = TelInput()
+
+    def __init__(self, *args, **kwargs):
+        super(TelField, self).__init__(*args, **kwargs)
+
+
+class SearchField(_SearchField):
+    widget = SearchInput()
+
+    def __init__(self, *args, **kwargs):
+        super(SearchField, self).__init__(*args, **kwargs)
+
+
+class EmailField(_EmailField):
+    widget = EmailInput()
+
+    def __init__(self, *args, **kwargs):
+        super(EmailField, self).__init__(*args, **kwargs)
+
+
+class DecimalRangeField(_DecimalRangeField):
+    widget = RangeInput()
+
+    def __init__(self, *args, **kwargs):
+        super(DecimalRangeField, self).__init__(*args, **kwargs)
+
+
+class IntegerRangeField(_IntegerRangeField):
+    widget = NumberInput()
+
+    def __init__(self, *args, **kwargs):
+        super(IntegerRangeField, self).__init__(*args, **kwargs)
