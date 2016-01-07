@@ -302,6 +302,16 @@ class ParsleyTestForm(Form):
         default = "crashoverhackthemainframe.c"
     )
 
+    tel = wtformsparsleyjs.TelField(
+        label = "Enter your telephone number: ",
+        validators = [
+            validators.Regexp('^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$',
+                message = "Please enter a valid telephone number e.g. +91 (123) 456-7890"
+            )
+        ],
+        default = "+91 (123) 456-7890 0000000"
+    )
+
     search = wtformsparsleyjs.SearchField(
         label = "Enter your search term: ",
         validators = [
