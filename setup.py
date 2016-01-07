@@ -21,6 +21,7 @@ setup(
     name='WTForms-ParsleyJS',
     version='2.0.1',
     url='https://github.com/fuhrysteve/wtforms-parsleyjs',
+    download_url='https://github.com/fuhrysteve/wtforms-parsleyjs/tarball/2.0.1',
     license='MIT',
     author='Johannes Gehrs',
     author_email='jgehrs@gmail.com',
