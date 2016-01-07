@@ -12,7 +12,7 @@ JavaScript validation library. It is configured using specific HTML markup in th
 This library will generate these attributes from your WTForms validators.
 
 For more information consult the README.md in the Github repository at
-https://github.com/johannes-gehrs/wtforms-parsleyjs
+https://github.com/fuhrysteve/wtforms-parsleyjs
 
 """
 from setuptools import setup
@@ -20,7 +20,7 @@ from setuptools import setup
 setup(
     name='WTForms-ParsleyJS',
     version='2.0.1',
-    url='https://github.com/johannes-gehrs/wtforms-parsleyjs',
+    url='https://github.com/fuhrysteve/wtforms-parsleyjs',
     license='MIT',
     author='Johannes Gehrs',
     author_email='jgehrs@gmail.com',
