@@ -11,3 +11,4 @@ if __name__ == '__main__':
 
     # copy result to index.html
     shutil.copy( join('wtformsparsleyjs', 'sample', 'build', 'parsley_testform'), 'index.html')
+    shutil.copytree( join('wtformsparsleyjs', 'sample', 'build', 'static'), 'static')
