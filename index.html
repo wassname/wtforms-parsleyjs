@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>WTForms-ParsleyJS Sample</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"
+              rel="stylesheet">
+        <style>
+            body {
+                padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+            }
+        </style>
+    
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse"
+                    data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href=/parsley_testform>WTForms-Parsley
+                Sample</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    
+    <p class="lead">Check out the form validation!</p>
+    
+    <form method=post action="/parsley_testform">
+        <fieldset>
+            
+                
+    <label class="control-label" for="email"><label for="email">E-Mail Address</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Sorrry, not a valid email address." data-parsley-pattern="^.+@([^.@][^@]+)$" data-parsley-trigger="change" data-parsley-type="email" id="email" name="email" type="email" value="test@example.com">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="ip_address"><label for="ip_address">IP4 Address</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Sorry, not a valid IP4 Address." data-parsley-pattern="^\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b$" data-parsley-trigger="change" id="ip_address" name="ip_address" type="text" value="127.0.0.1">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="uuid"><label for="uuid">UUID</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Sorry, not a valid UUID." data-parsley-pattern="^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$" data-parsley-trigger="change" id="uuid" name="uuid" type="text" value="863b5570-ee85-4099-ba1d-33018282cd00">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="mac_address"><label for="mac_address">Mac Address</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Sorry, not a valid mac address." data-parsley-pattern="^(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$" data-parsley-trigger="change" id="mac_address" name="mac_address" type="text" value="10:B0:46:8C:80:48">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="string_length"><label for="string_length">Length of String (5 to 10)</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Length should be between 5 and 10 characters." data-parsley-length="[5,10]" data-parsley-trigger="change" id="string_length" name="string_length" type="text" value="Hello!">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="number_range"><label for="number_range">Number Range (5 to 10)</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Range should be between 5 and 10." data-parsley-range="[5,10]" data-parsley-trigger="change" data-parsley-type="integer" id="number_range" name="number_range" type="text" value="7">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="required_text"><label for="required_text">Required Field</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Sorry, this is a required field." data-parsley-required="true" data-parsley-trigger="key" id="required_text" name="required_text" type="text" value="Mandatory text">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="required_select"><label for="required_select">Required Select</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <select data-parsley-error-message="Sorry, you have to make a choice." data-parsley-required="true" data-parsley-trigger="key" id="required_select" name="required_select"><option value="">Please select an option</option><option value="cpp">C++</option><option selected value="py">Python</option><option value="text">Plain Text</option></select>
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="required_checkbox"><label for="required_checkbox">Required Checkbox</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input checked data-parsley-error-message="Sorry, you need to accept this." data-parsley-required="true" data-parsley-trigger="key" id="required_checkbox" name="required_checkbox" type="checkbox" value="y">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="regexp"><label for="regexp">Regex-Matched Hex Color-Code</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Not a proper color code, sorry." data-parsley-pattern="^#[A-Fa-f0-9]{6}$" data-parsley-trigger="change" id="regexp" name="regexp" type="text" value="#7D384F">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="anyof"><label for="anyof">Car, Bike or Plane?</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-anyof="[&quot;car&quot;, &quot;bike&quot;, &quot;plane&quot;]" data-parsley-error-message="Sorry, you can only choose from car, bike and plane" data-parsley-trigger="change" id="anyof" name="anyof" type="text" value="car">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="date_of_birth"><label for="date_of_birth">Date of birth in the format DD-MM-YYYY</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-datefield="%d-%m-%Y" data-parsley-error-message="Sorry this input is required." data-parsley-required="true" data-parsley-trigger="key" id="date_of_birth" name="date_of_birth" type="text" value="24-01-2016">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="date_time"><label for="date_time">Date and time in the format DD/MM/YYYY HH:MM</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-datefield="%d/%m/%Y %H:%M" data-parsley-error-message="Sorry this input is required." data-parsley-required="true" data-parsley-trigger="key" id="date_time" name="date_time" type="text" value="24/01/2016 06:52">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="length"><label for="length">Exact length, as a decimal</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Sorry this input is required." data-parsley-required="true" data-parsley-trigger="key" data-parsley-type="number" id="length" name="length" type="text" value="4.20">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="txt_file"><label for="txt_file">Optional file field, of .txt format</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Must be a *.txt file" data-parsley-pattern="^.+\.txt$" data-parsley-trigger="change" id="txt_file" name="txt_file" type="file">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="float_field"><label for="float_field">A float value</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Sorry this input is required." data-parsley-required="true" data-parsley-trigger="key" data-parsley-type="number" id="float_field" name="float_field" type="text" value="4.2">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="best_thing_ever"><label for="best_thing_ever">Is this the best thing ever?</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <ul id="best_thing_ever"><li><label for="best_thing_ever-0">Yes</label> <input checked data-parsley-error-message="We need and answer please." data-parsley-required="true" data-parsley-trigger="key" id="best_thing_ever-0" name="best_thing_ever" type="radio" value="y"></li><li><label for="best_thing_ever-1">No</label> <input data-parsley-error-message="We need and answer please." data-parsley-required="true" data-parsley-trigger="key" id="best_thing_ever-1" name="best_thing_ever" type="radio" value="n"></li></ul>
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="colour"><label for="colour">Select your favourite colour.</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <select data-parsley-error-message="Sorry this input is required." data-parsley-required="true" data-parsley-trigger="key" id="colour" name="colour"><option value="red">Red</option><option value="blue">Blue</option><option value="green">Green</option></select>
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="hobbies"><label for="hobbies">Select your hobbies: </label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <select data-parsley-trigger="change" id="hobbies" multiple name="hobbies"><option value="cooking">Cooking</option><option value="coding">Coding</option><option value="reading">Reading</option><option value="fishing">Fishing</option><option value="sewing">Sewing</option></select>
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="name"><label for="name">Whom would you have me welease?</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Ah. We have no Woger and no Woderick" data-parsley-noneof="[&quot;Roger&quot;, &quot;Roderick&quot;, &quot;Woger&quot;, &quot;Woderick&quot;]" data-parsley-trigger="change" id="name" name="name" type="text" value="Brian">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="hidden"><label for="hidden">Hidden value</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Must be greater than 5" data-parsley-range="[5,None]" data-parsley-trigger="change" id="hidden" name="hidden" type="hidden" value="6">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="secret"><label for="secret">Enter your secret:</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Sorry this input is required." data-parsley-required="true" data-parsley-trigger="key" id="secret" name="secret" type="password" value="">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="same_secret"><label for="same_secret">Enter your secret again: </label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-equalto="#secret" data-parsley-error-message="Secrets do not match." data-parsley-trigger="change" id="same_secret" name="same_secret" type="password" value="">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="life_story"><label for="life_story">Tell us your life story...</label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <textarea data-parsley-error-message="C&#x27;mon that&#x27;s not long enough to be a life story" data-parsley-minlength="50" data-parsley-trigger="change" id="life_story" name="life_story">This is my life story, it has to be at least 50 characters.</textarea>
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="url"><label for="url">Enter your website: </label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-trigger="change" id="url" name="url" type="url" value="crashoverhackthemainframe.c">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="tel"><label for="tel">Enter your telephone number: </label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Please enter a valid telephone number e.g. +91 (123) 456-7890" data-parsley-pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$" data-parsley-trigger="change" id="tel" name="tel" type="tel" value="+91 (123) 456-7890 0000000">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="search"><label for="search">Enter your search term: </label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="Search query too long it almost killed our server" data-parsley-maxlength="10" data-parsley-trigger="change" id="search" name="search" type="search" value="How can mirrors be real when our eyes arn&#x27;t real?">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="decimal_range"><label for="decimal_range">Enter your favorite decimal: </label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="That&#x27;s not your favourite number, it&#x27;s between 0 and 50" data-parsley-range="[0,50]" data-parsley-trigger="change" id="decimal_range" name="decimal_range" type="range" value="70.00">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+                
+    <label class="control-label" for="ineger_range"><label for="ineger_range">Enter your age (you must be over 18): </label></label>
+    <div class="control-group ">
+        <div class="controls">
+            <input data-parsley-error-message="That&#x27;s not your age, it&#x27;s between 3 and 5" data-parsley-range="[3,5]" data-parsley-trigger="change" id="ineger_range" name="ineger_range" type="number" value="18">
+            
+    <span class="help-inline">
+            
+    </span>
+
+        </div>
+    </div>
+
+            
+            <p><input type=submit value=Submit>
+        </fieldset>
+    </form>
+
+</div>
+<!-- /container -->
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="/static/scripts/parsley.js"></script>
+    <script src="/static/scripts/parsley-noneof.js"></script>
+    <script src="/static/scripts/parsley-anyof.js"></script>
+    <script src="/static/scripts/parsley-datefield.js"></script>
+    <script>$('form').parsley({ successClass: 'success', errorClass: 'error',
+        errors: {
+            classHandler: function (element) {
+                return $(element).parent().parent();
+            },
+            container: function (element) {
+                var $container = element.parent().find(".help-inline");
+                if ($container.length === 0) {
+                    $container = $("<span class='help-inline'></span>").insertAfter(element);
+                };
+                return $container;
+            },
+            errorsWrapper: '<ul class="unstyled"></ul>'
+        }});
+    </script>
+
+</body>
+</html>
